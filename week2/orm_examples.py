@@ -1,42 +1,22 @@
 from tasks.models import Task, Category
 from django.db.models import Q, Count
 
+# Базовые операции
+Task.objects.all()
+Task.objects.create(title="ORM задача")
+Task.objects.filter(completed=True)
+Task.objects.get(id=1)
+Task.objects.filter(id=1).update(title="Обновлено")
+Task.objects.filter(id=10).delete()
 
-all_tasks = Task.objects.all()
+# Агрегации
+Task.objects.count()
+Task.objects.filter(completed=True).count()
+Task.objects.values('priority').annotate(count=Count('id'))
 
-category = Category.objects.first()
-new_task = Task.objects.create(
-    title="ORM задача",
-    priority=2,
-    category=category
-)
+# Q объекты
+Task.objects.filter(Q(priority=3) | Q(completed=False))
+Task.objects.filter(Q(title__icontains="django") & Q(completed=False))
 
-completed_tasks = Task.objects.filter(completed=True)
-
-try:
-    task_one = Task.objects.get(id=1)
-except Task.DoesNotExist:
-    task_one = None
-
-Task.objects.filter(id=1).update(title="Обновлено через ORM")
-
-
-
-total_count = Task.objects.count()
-
-completed_count = Task.objects.filter(completed=True).count()
-
-priority_distribution = Task.objects.values('priority').annotate(count=Count('id'))
-
-
-complex_filter_tasks = Task.objects.filter(
-    Q(priority=3) | Q(completed=False)
-)
-
-django_tasks = Task.objects.filter(
-    Q(title__icontains="django") & Q(completed=False)
-)
-
-
-
-sorted_tasks = Task.objects.order_by('-priority', 'title')
+# Сортировка
+Task.objects.order_by('-priority', 'title')

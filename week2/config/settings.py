@@ -40,9 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tasks',
+    'rest_framework', #DRF
+    'drf_spectacular', #Swagger UI
+    'corsheaders', #CORS
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', #for CORS
+    'django.middleware.common.CommonMiddleware', #for CORS
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,6 +58,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',  # Vite dev-сервер
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Internship Tasks API',
+    'DESCRIPTION': 'Учебный API для W3',
+    'VERSION': '1.0.0',
+}
 
 TEMPLATES = [
     {
