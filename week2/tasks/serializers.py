@@ -29,9 +29,17 @@ class TaskSerializer(serializers.ModelSerializer):
     priority = serializers.SerializerMethodField()
 
     def get_priority(self, obj):
-        mapping = {
-            1: 'low',
-            2: 'medium',
-            3: 'high'
-        }
+        mapping = {1: 'low', 2: 'medium', 3: 'high'}
         return mapping.get(obj.priority, 'medium')
+
+    def to_internal_value(self, data):
+        internal_data = super().to_internal_value(data)
+
+        if 'priority' in data:
+            priority_word = data['priority']
+            word_to_num = {'low': 1, 'medium': 2, 'high': 3}
+
+            if priority_word in word_to_num:
+                internal_data['priority'] = word_to_num[priority_word]
+
+        return internal_data

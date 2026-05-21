@@ -4,6 +4,7 @@ from rest_framework import status
 from .models import Task
 from .serializers import TaskSerializer
 from django.shortcuts import get_object_or_404
+
 class TaskListAPIView(APIView):
     def get(self, request):
         tasks = Task.objects.all()
